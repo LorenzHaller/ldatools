@@ -13,11 +13,6 @@
 #'   \code{\link[ggplot2:geom_ribbon]{geom_ribbon}} \code{geom_stepribbon}
 #'   inherits from \code{geom_ribbon}.
 #' @inheritParams ggplot2:::geom_ribbon
-#' @param kmplot If \code{TRUE}, missing values are replaced by the previous
-#' values. This option is needed to make Kaplan-Meier plots if the last
-#' observation has event, in which case the upper and lower values of the
-#' last observation are missing. This processing is optimized for results
-#' from the survfit function.
 #' @examples
 #' huron <- data.frame(year = 1875:1972, level = as.vector(LakeHuron))
 #' h <- ggplot(huron, aes(year))
@@ -37,7 +32,7 @@ geom_stepribbon <- function(
   na.rm       = FALSE,
   show.legend = NA,
   inherit.aes = TRUE, ...) {
-  
+
   layer(
     data        = data,
     mapping     = mapping,
@@ -48,7 +43,7 @@ geom_stepribbon <- function(
     inherit.aes = inherit.aes,
     params      = list(na.rm = na.rm, ... )
   )
-  
+
 }
 
 #' @rdname geom_stepribbon
@@ -57,10 +52,10 @@ geom_stepribbon <- function(
 #' @export
 
 GeomStepribbon <- ggproto(
-  "GeomStepribbon", GeomRibbon, 
-  
+  "GeomStepribbon", GeomRibbon,
+
   extra_params = c("na.rm"),
-  
+
   draw_group = function(data, panel_scales, coord, na.rm = FALSE) {
 
     if (na.rm) data <- data[complete.cases(data[c("x", "ymin", "ymax")]), ]
@@ -71,5 +66,5 @@ GeomStepribbon <- ggproto(
     GeomRibbon$draw_group(data, panel_scales, coord, na.rm = FALSE)
 
   }
-  
+
 )
