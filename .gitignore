@@ -1,3 +1,13 @@
+## RStudio
 .Rproj.user
+*.Rproj
+
+## R-Session outputs
 .Rhistory
 .RData
+
+## Dropbox
+*.dropbox.attr
+
+## temporary Folders
+sandbox/
