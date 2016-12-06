@@ -21,7 +21,6 @@
 #' @import magrittr dplyr ggplot2
 #' @importFrom stats pexp
 #' @export
-#'
 gg_coxsnell <- function(object, type=c("cumuhazard", "cdf")) {
 
 	type <- match.arg(type)
