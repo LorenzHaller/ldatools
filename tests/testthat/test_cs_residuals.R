@@ -11,4 +11,17 @@ test_that("Dimensions and names correct", {
 
 test_that("Error thrown on misspecification", {
 	expect_error(get_coxsnell())
+	expect_error(get_coxsnell(iris))
+	expect_error(get_csdata(iris))
+})
+
+
+test_that("Cox-Snell plots work", {
+	expect_is(gg_coxsnell(cox.tongue, type="cumuhazard"), c("gg", "ggplot"))
+	expect_is(gg_coxsnell(cox.tongue, type="cdf"), c("gg", "ggplot"))
+})
+
+
+test_that("Cox-Snell throws error on misspecification", {
+	expect_error(gg_coxsnell(iris, type="cumuhazard"))
 })
