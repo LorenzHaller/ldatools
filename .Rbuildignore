@@ -3,3 +3,6 @@
 
 sandbox/
 README.mdown
+
+## travis
+.travis.yml

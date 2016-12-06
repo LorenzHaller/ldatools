@@ -7,7 +7,10 @@
 get_coxsnell(object)
 }
 \arguments{
-\item{object}{An object of class \code{link[survival]{coxph}}}
+\item{object}{An object of class \code{\link[survival]{coxph}}}
+}
+\value{
+A vector of Cox-Snell residuals.
 }
 \description{
 Extract Cox-Snell residuals from a \code{coxph} object

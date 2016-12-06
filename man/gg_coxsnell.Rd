@@ -7,7 +7,7 @@
 gg_coxsnell(object, type = c("cumuhazard", "cdf"))
 }
 \arguments{
-\item{object}{An object of class \code{link[survival]{coxph}}}
+\item{object}{An object of class \code{\link[survival]{coxph}}}
 
 \item{type}{\code{character}. Optional argument. If \code{"cumuhazard"} plots
 cumulative hazard (Nelson-Aalen estimate) vs. Cox-Snell residuals.
@@ -15,7 +15,7 @@ If \code{"cdf"} plot empirical cumulative distribution Function (Breslow estimat
 vs. Cox-Snell residuals.}
 }
 \value{
-A \code{\link[ggplot2]{ggplot}}
+A \code{\link[ggplot2]{ggplot}} object.
 }
 \description{
 \code{gg_coxsnell} extracts Cox-Snell residuals from an \code{\link[survival]{coxph}}

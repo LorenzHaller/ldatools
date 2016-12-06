@@ -11,8 +11,8 @@ get_csdata(object)
 }
 \value{
 A data frame containing (not censored) Cox-Snell residuals (\code{coxsnell})
-and Nelson-Aalen estimate of the Cumulative Hazard (\code{H}) as well as the
-Breslow estimate for the Survival function (\code{S}) for censored data.
+and Nelson-Aalen estimate of the Cumulative Hazard (\code{Lambda}) as well as the
+Breslow estimate for the Survival function (\code{Survivor}) for censored data.
 }
 \description{
 Extract data needed to create Cox-Snell vs. Cumulative hazard plot
