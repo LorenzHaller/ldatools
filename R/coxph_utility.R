@@ -5,7 +5,14 @@
 #' @export
 #'
 get_coxsnell <- function(object) {
+
+		## check inputs
+		assert_class(object, "coxph")
+		## calculate residuals as r(cox-snell)=delta - r(martingale)
 		r.cs <- object$y[, "status"] - object$residuals
+
+		return(r.cs)
+
 }
 
 
