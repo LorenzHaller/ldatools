@@ -1,3 +1,9 @@
+language: r
+sudo: false
+cache: packages
+r:
+  - release
+
 r_github_packages:
   - jimhester/covr
 
