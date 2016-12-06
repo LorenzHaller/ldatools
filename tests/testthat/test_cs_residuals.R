@@ -10,5 +10,5 @@ test_that("Dimensions and names correct", {
 
 
 test_that("Error thrown on misspecification", {
-	expect_error()
+	expect_error(get_coxsnell())
 })
