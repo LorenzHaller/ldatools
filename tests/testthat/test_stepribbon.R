@@ -9,6 +9,6 @@ gg.obj <- ggplot(tdf, aes(x=time, y=estimate)) +
 	geom_stepribbon(aes(ymin=conf.low, ymax=conf.high))
 
 
-testthat("Geom stepribbon works without error", {
+test_that("Geom stepribbon works without error", {
 	expect_is(gg.obj, c("gg", "ggplot"))
 })

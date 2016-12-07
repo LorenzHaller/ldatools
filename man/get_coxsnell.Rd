@@ -4,10 +4,12 @@
 \alias{get_coxsnell}
 \title{Extract Cox-Snell residuals from a \code{coxph} object}
 \usage{
-get_coxsnell(object)
+get_coxsnell(fit)
 }
 \arguments{
-\item{object}{An object of class \code{\link[survival]{coxph}}}
+\item{fit}{
+    the result of fitting a Cox regression model, using the \code{coxph} function. 
+  }
 }
 \value{
 A vector of Cox-Snell residuals.

@@ -4,15 +4,18 @@
 \alias{get_csdata}
 \title{Extract data needed to create Cox-Snell vs. Cumulative hazard plot}
 \usage{
-get_csdata(object)
+get_csdata(fit)
 }
 \arguments{
-\item{object}{An object of class \code{\link[survival]{coxph}}.}
+\item{fit}{
+    the result of fitting a Cox regression model, using the \code{coxph} function. 
+  }
 }
 \value{
-A data frame containing (not censored) Cox-Snell residuals (\code{coxsnell})
-and Nelson-Aalen estimate of the Cumulative Hazard (\code{Lambda}) as well as the
-Breslow estimate for the Survival function (\code{Survivor}) for censored data.
+A data frame containing (not censored) Cox-Snell residuals 
+(\code{coxsnell}) and Nelson-Aalen estimate of the Cumulative Hazard 
+(\code{Lambda}) as well as the Breslow estimate for the Survival 
+function (\code{Survivor}) for censored data.
 }
 \description{
 Extract data needed to create Cox-Snell vs. Cumulative hazard plot

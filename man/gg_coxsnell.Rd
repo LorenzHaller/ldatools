@@ -4,10 +4,12 @@
 \alias{gg_coxsnell}
 \title{Overall model fit diagnostic via Cox-Snell residuals.}
 \usage{
-gg_coxsnell(object, type = c("cumuhazard", "cdf"))
+gg_coxsnell(fit, type = c("cumuhazard", "cdf"))
 }
 \arguments{
-\item{object}{An object of class \code{\link[survival]{coxph}}}
+\item{fit}{
+    the result of fitting a Cox regression model, using the \code{coxph} function. 
+  }
 
 \item{type}{\code{character}. Optional argument. If \code{"cumuhazard"} plots
 cumulative hazard (Nelson-Aalen estimate) vs. Cox-Snell residuals.
