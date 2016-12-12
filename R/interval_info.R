@@ -1,7 +1,7 @@
 # @Author: andreas.bender@stat.uni-muenchen.de
 # @Date:   2016-12-12 16:11:27
 # @Last Modified by:   andreas.bender@stat.uni-muenchen.de
-# @Last Modified time: 2016-12-12 16:11:39
+# @Last Modified time: 2016-12-12 16:17:50
 
 #' Given breaks, create start/end times and interval information
 #'
@@ -14,7 +14,6 @@
 #' length, interval mid-point and a factor variable of the intervals themselfs.
 #' @import checkmate dplyr
 #' @export
-
 int_info <- function(
   brks,
   min.time = 0L) {
