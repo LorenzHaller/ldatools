@@ -1,4 +1,4 @@
-# stolen from the RmcdrPlugin.KMggplot2 (slightly modified)
+# Stolen from the \code{RmcdrPlugin.KMggplot2} (slightly modified)
 
 #' Step ribbon plots.
 #'
@@ -59,10 +59,10 @@ GeomStepribbon <- ggproto(
   draw_group = function(data, panel_scales, coord, na.rm = FALSE) {
 
     if (na.rm) data <- data[complete.cases(data[c("x", "ymin", "ymax")]), ]
-    data <- rbind(data, data)
-    data <- data[order(data$x), ]
+    data   <- rbind(data, data)
+    data   <- data[order(data$x), ]
     data$x <- c(data$x[2:nrow(data)], NA)
-    data <- data[complete.cases(data["x"]), ]
+    data   <- data[complete.cases(data["x"]), ]
     GeomRibbon$draw_group(data, panel_scales, coord, na.rm = FALSE)
 
   }

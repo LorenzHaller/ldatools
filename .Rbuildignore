@@ -1,2 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+
+sandbox/
+README.mdown
+
+## travis
+.travis.yml
