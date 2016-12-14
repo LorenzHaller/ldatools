@@ -1,6 +1,6 @@
 # ldatools: Utility tools for Life-time Data Analysis
 [![Build Status](https://travis-ci.org/adibender/ldatools.svg?branch=master)](https://travis-ci.org/adibender/ldatools)
-[![codecov.io](https://codecov.io/github/adibender/ldatools/coverage.svg?branch=master)](https://codecov.io/github/adibender/ldatools/branch/devel)
+[![codecov.io](https://codecov.io/github/adibender/ldatools/coverage.svg?branch=master)](https://codecov.io/github/adibender/ldatools/branch/master)
 
 
 Note: The `geom_stepribbon` function was copied almost without change from 
