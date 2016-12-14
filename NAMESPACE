@@ -3,7 +3,7 @@
 export(GeomStepribbon)
 export(geom_stepribbon)
 export(get_coxsnell)
-export(get_csdata)
+export(get_csvec)
 export(get_scaledsch)
 export(gg_coxsnell)
 export(gg_scaledsch)

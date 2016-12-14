@@ -2,7 +2,7 @@
 % Please edit documentation in R/coxph_utility.R
 \name{get_coxsnell}
 \alias{get_coxsnell}
-\title{Extract Cox-Snell residuals from a \code{coxph} object}
+\title{Extract data needed to create Cox-Snell vs. Cumulative hazard plot}
 \usage{
 get_coxsnell(fit)
 }
@@ -12,9 +12,19 @@ get_coxsnell(fit)
   }
 }
 \value{
-A vector of Cox-Snell residuals.
+A data frame containing (not censored) Cox-Snell residuals 
+(\code{coxsnell}) and Nelson-Aalen estimate of the Cumulative Hazard 
+(\code{Lambda}) as well as the Breslow estimate for the Survival 
+function (\code{Survivor}) for censored data.
 }
 \description{
-Extract Cox-Snell residuals from a \code{coxph} object
+Extract data needed to create Cox-Snell vs. Cumulative hazard plot
+}
+\examples{
+library(survival)
+data("tongue", package="KMsurv")
+cox.tongue <- coxph(Surv(time, delta)~as.factor(type), data=tongue)
+cs.data <- get_coxsnell(cox.tongue)
+head(cs.data)
 }
 

@@ -5,7 +5,7 @@
 #' @importFrom checkmate assert_class
 #' @export
 #'
-get_coxsnell <- function(fit) {
+get_csvec <- function(fit) {
 
 		## check inputs
 		assert_class(fit, "coxph")
@@ -32,11 +32,11 @@ get_coxsnell <- function(fit) {
 #' library(survival)
 #' data("tongue", package="KMsurv")
 #' cox.tongue <- coxph(Surv(time, delta)~as.factor(type), data=tongue)
-#' cs.data <- get_csdata(cox.tongue)
+#' cs.data <- get_coxsnell(cox.tongue)
 #' head(cs.data)
 #' @export
 #'
-get_csdata <- function(fit) {
+get_coxsnell <- function(fit) {
 
 	# check inputs
 	assert_class(fit, "coxph")
@@ -44,7 +44,7 @@ get_csdata <- function(fit) {
 	# extract cox snell residuals using relationship r.cs = delta - r.ma
 	# whre delta is the censoring indicator from the original data and r.ma
 	# are the martingale residuals
-	r.cs <- get_coxsnell(fit)
+	r.cs <- get_csvec(fit)
 	# estimate the cumulative hazard of the censored sample r.cs
 	sfit <- survfit(coxph(Surv(r.cs, fit$y[, "status"]) ~1, method="breslow"), 
 			type="aalen") %>%

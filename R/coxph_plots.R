@@ -25,7 +25,7 @@ gg_coxsnell <- function(fit, type=c("cumuhazard", "cdf")) {
 
 	type <- match.arg(type)
 
-	cs.data <- get_csdata(fit)
+	cs.data <- get_coxsnell(fit)
 
 	if(type=="cdf") {
 		cs.data %<>% mutate(
@@ -58,23 +58,22 @@ gg_coxsnell <- function(fit, type=c("cumuhazard", "cdf")) {
 #' @import ggplot2
 #' @importFrom checkmate assert_class
 #' @export
-gg_scaledsch <- function(fit, transform="identity") {
+gg_scaledsch <- function(fit, transform="km") {
 
 	## check input 
 	assert_class(fit, "coxph")
 
 	## obtain scaled schoenfeld residuals and (transformed time)
 	scaledsch <- get_scaledsch(fit=fit, transform=transform)
-	trans.string <- ifelse(trans <- Unique(scaledsch$transform=="identity"), "t", 
-		paste0(trans, "(t)"))
+	trans.string <- ifelse(unique(scaledsch$transform)=="identity", "t", 
+		paste0(unique(scaledsch$transform), "(t)"))
 
 	gg.zph <- ggplot(scaledsch, aes(x=time, y=residual)) + 
 		geom_point() + 
 		facet_wrap(~variable, nrow=2, scales="free_y") + 
 		geom_smooth(method="lm", lty=2, aes(col="lm")) + 
 		geom_smooth(method="gam", formula=y~s(x), aes(col="gam")) + 
-		scale_color_discrete(name="method")
-		# geom_smooth(method="loess", aes(col="loess")) + 
+		scale_color_discrete(name="method") +
 		geom_hline(yintercept=0, lty=3) + 
 		xlab(trans.string) + ylab(expression(beta(t)))
 

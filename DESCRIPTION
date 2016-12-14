@@ -1,9 +1,8 @@
 Package: ldatools
 Title: Utility functions for life-time data analysis
-Version: 0.0.202
+Version: 0.0.302
 Authors@R: person("Andreas", "Bender", email = "bender.at.R@gmail.com", role = c("aut", "cre"))
-Description: A step version of geom_ribbon. Shamelessly stolen from the
-    RcmdrPlugin.KMggplot2 package.
+Description: A few utility functions for life-time data analysis.
 Depends:
     R (>= 3.1.3),
     ggplot2 (>= 2.0.0)

@@ -4,7 +4,7 @@
 \alias{gg_scaledsch}
 \title{Plot scaled schoenfeld residuals vs. time}
 \usage{
-gg_scaledsch(fit, transform = "identity")
+gg_scaledsch(fit, transform = "km")
 }
 \arguments{
 \item{fit}{
