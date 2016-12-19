@@ -134,13 +134,14 @@ get_term <- function(fit, data, term, ...) {
 #' @inheritParams get_term
 #' @param terms A character vector (can be length one). Specifies the terms
 #' for which partial effects will be returned
-#' @import checkmate survival
+#' @import checkmate
 #' @return A data frame with 5 columns.
 #' @seealso \code{\link[survival]{coxph}}
+#' @export
 #' @examples
+#' library(survival)
 #' fit <- coxph(Surv(time, status) ~ pspline(karno, df=4), data=veteran)
 #' term.karno <- get_terms(fit, veteran, terms="karno")
-#' @export
 get_terms <- function(fit, data, terms, ...) {
 
   # check inputs

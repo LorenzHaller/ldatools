@@ -26,6 +26,7 @@ A data frame with 5 columns.
 Extract the partial effects of non-linear model terms
 }
 \examples{
+library(survival)
 fit <- coxph(Surv(time, status) ~ pspline(karno, df=4), data=veteran)
 term.karno <- get_terms(fit, veteran, terms="karno")
 }
