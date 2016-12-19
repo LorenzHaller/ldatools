@@ -86,3 +86,61 @@ get_scaledsch <- function(fit, transform="km") {
 		gather(variable, residual, -time, -transform)
 
 }
+
+
+#' Extract partial effects for specified model terms
+#' 
+#' @inheritParams survival::cox.zph
+#' @param data Any data frame containing variables used to fit the model. Only 
+#' first row will be used. 
+#' @param term The (non-linear) model term of interest.
+#' @param ... Currently ignored.
+#' @importFrom stats predict setNames
+#' 
+get_term <- function(fit, data, term, ...) {
+
+	col.term <- grep(term, colnames(data), value=TRUE)
+	if(length(col.term) > 1) {
+		stop(paste0("More than one column in data that contain term: ", term, "."))
+	}
+
+	range.term <- range(data[[col.term]])
+	seq.term <- seq(range.term[1], range.term[2], length.out = 100)
+
+	newdf <- data[1, ]
+	rm(data)
+	gc()
+
+	newdf <- newdf[rep(1, length(seq.term)), ]
+	newdf[[col.term]] <- seq.term 
+	pred.term <- predict(fit, newdata=newdf, type="terms", se.fit=TRUE)
+	ind.term <- grep(term, colnames(pred.term$fit), value=TRUE)
+	newdf %<>% mutate(
+		term = col.term,
+		eff = as.numeric(pred.term$fit[, ind.term]),
+		se = as.numeric(pred.term$se.fit[, ind.term]),
+		ci.lower = eff - 2*se,
+		ci.upper = eff + 2*se) %>% 
+	select_(.dots=c("term", col.term, "eff", "se", "ci.lower", "ci.upper")) %>% 
+	rename_(.dots=setNames(col.term, "x"))
+
+	return(newdf)
+
+}
+
+#' Extract the partial effects of non-linear model terms
+#' 
+#' @inheritParams get_term
+#' @param terms A character vector (can be length one). Specifies the terms 
+#' for which partial effects will be returned
+#' @return A data frame with 5 columns. 
+#' @export
+get_terms <- function(fit, data, terms, ...) {
+
+	term.list <- lapply(terms, function(z) {
+		get_term(fit=fit, data=data, term=z, ...)
+	})
+
+	bind_rows(term.list)
+
+}
