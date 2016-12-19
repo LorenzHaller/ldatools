@@ -19,7 +19,7 @@ get_scaledsch(fit, transform = "km")
   }
 }
 \value{
-A tidy data frame containing the (transformed) time and scaled 
+A tidy data frame containing the (transformed) time and scaled
 Schoenfeld residuals for the variables used in \code{fit}
 }
 \description{
