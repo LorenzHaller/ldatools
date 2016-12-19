@@ -11,7 +11,7 @@ get_term(fit, data, term, ...)
     the result of fitting a Cox regression model, using the \code{coxph} function. 
   }
 
-\item{data}{Any data frame containing variables used to fit the model. Only 
+\item{data}{Any data frame containing variables used to fit the model. Only
 first row will be used.}
 
 \item{term}{The (non-linear) model term of interest.}
