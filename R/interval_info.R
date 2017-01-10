@@ -1,7 +1,7 @@
 # @Author: andreas.bender@stat.uni-muenchen.de
 # @Date:   2016-12-12 16:11:27
 # @Last Modified by:   andreas.bender@stat.uni-muenchen.de
-# @Last Modified time: 2016-12-12 16:17:50
+# @Last Modified time: 2017-01-10 12:19:13
 
 #' Given breaks, create start/end times and interval information
 #'
@@ -22,6 +22,10 @@ int_info <- function(
   assert_numeric(brks, lower = 0, any.missing = FALSE)
   assert_numeric(min.time, lower  = 0L)
 
+  # sort brks and add origin if necessary
+  if(is.unsorted(brks)) {
+    brks <- sort(brks)
+  }
   if(min(brks!=0)) {
     brks <- c(0, brks)
   }
