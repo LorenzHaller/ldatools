@@ -46,3 +46,39 @@ int_info <- function(
   filter(tdf, tstart >= min.time)
 
 }
+
+
+
+#' Given breaks, return intervals in which times vector falls
+#' 
+#' @inheritParams int_info
+#' @param x Vector of values for which interval information should be returned.
+#' @param ... Further arguments passed to \code{\link[base]{findInterval}}.
+#' @import dplyr
+#' @return A \code{data.frame} containing information on intervals in which 
+#' values of x fall
+#' @examples
+#' set.seed(111018)
+#' brks <- c(0, 4.5, 5, 10, 30)
+#' int_info(brks)
+#' x <- runif(3, 0, 30)
+#' get_intervals(brks, x, left.open=TRUE)
+#' @export
+#' @seealso findInterval int_info
+
+get_intervals <- function(brks, x, ...) {
+
+  # check inputs
+  assert_numeric(brks, lower = 0, any.missing = FALSE)
+  assert_numeric(x, finite = TRUE, all.missing = FALSE)
+
+  int.df <- int_info(brks)
+  int <- findInterval(x, union(int.df$tstart, int.df$tend), ...)
+
+  int.df %>% 
+    slice(int)      %>%
+    mutate(x = x)   %>%
+    arrange(tstart) %>%
+    select(x, everything())
+
+}
