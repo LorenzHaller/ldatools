@@ -6,3 +6,4 @@ README.mdown
 ## travis
 .travis.yml
 ^LICENSE\.md$
+^docs$
