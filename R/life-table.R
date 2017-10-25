@@ -16,7 +16,7 @@ lifetable <- function(data, formula, cut = NULL) {
   split_df <- split_info(formula, data = data, cut = cut, id = "id") %>%
     select(id:tend, interval, status) %>%
     group_by(id) %>%
-    mutate(censored = 1*(status == 0 & max(tend) == tend)) %>%
+    mutate(censored = 1 * (status == 0 & max(tend) == tend)) %>%
     ungroup() %>%
     mutate(interval = as.character(interval))
   split_df %>%
@@ -27,7 +27,7 @@ lifetable <- function(data, formula, cut = NULL) {
       dropouts = sum(censored)) %>%
     ungroup() %>%
     mutate(
-      riskset  = n - dropouts/2,
+      riskset  = n - dropouts / 2,
       hazard   = events / riskset,
       survival = cumprod(1 - hazard)) %>%
     arrange(tstart)

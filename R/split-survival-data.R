@@ -25,8 +25,8 @@ split_info <- function(formula, data, cut = NULL, ..., max.end = FALSE) {
   ## assert that inputs have correct formats
   assert_class(formula, "formula")
   assert_data_frame(data, min.rows = 2, min.cols = 2)
-  assert_numeric(cut, lower = 0, finite = TRUE, any.missing = FALSE, min.len = 1,
-    null.ok = TRUE)
+  assert_numeric(cut, lower = 0, finite = TRUE, any.missing = FALSE,
+    min.len = 1, null.ok = TRUE)
   assert_flag(max.end)
 
 
@@ -44,7 +44,7 @@ split_info <- function(formula, data, cut = NULL, ..., max.end = FALSE) {
   }
 
 
-  if (length(tvars)!= 2) {
+  if (length(tvars) != 2) {
     stop(
       "Currently a formula of the form Surv(time, event)~., is required.\n
       See ?Surv for more details.")
@@ -59,16 +59,16 @@ split_info <- function(formula, data, cut = NULL, ..., max.end = FALSE) {
   if (is.null(cut)) {
     cut <- unique(data[["time"]][data[["status"]] == 1])
   }
-  max.fail <- max(data[["time"]][data[["status"]] == 1])
-  max.time <- max(max(data[["time"]]), max(cut))
+  # max_fail <- max(data[["time"]][data[["status"]] == 1])
+  max_time <- max(max(data[["time"]]), max(cut))
 
 
   # sort interval cut points in case they are not (so that interval factor
   # variables will be in correct ordering)
   cut <- sort(cut)
   # add last observation to cut if necessary
-  if (max.end & (max.time > max(cut))) {
-    cut <- c(cut, max.time)
+  if (max.end & (max_time > max(cut))) {
+    cut <- c(cut, max_time)
   }
 
   ## crate argument list to be passed to survSplit
