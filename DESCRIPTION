@@ -1,8 +1,8 @@
 Package: ldatools
 Title: Utility functions for life-time data analysis
-Version: 0.0.314
-Authors@R: person("Andreas", "Bender", email = "bender.at.R@gmail.com", role = c("aut", "cre"))
-Description: A few utility functions for life-time data analysis.
+Version: 0.0.325
+Authors@R: person("Andreas", "Bender", , "andreas.bender@stat.uni-muenchen.de", role = c("aut", "cre"), comment=c(ORCID = "0000-0001-5628-8611"))
+Description: Utility functions for life-time data analysis (LDA).
 Depends:
     R (>= 3.1.3),
     ggplot2 (>= 2.0.0)
@@ -13,10 +13,13 @@ Imports:
 		tibble,
 		broom,
 		tidyr,
+    purrr,
+    rlang,
 		dplyr
-License: GPL-2
+License: MIT + file LICENSE
 LazyData: true
-RoxygenNote: 5.0.1
-Suggests: 
+RoxygenNote: 6.0.1
+Suggests:
     testthat,
-    KMsurv
+    KMsurv,
+    MASS

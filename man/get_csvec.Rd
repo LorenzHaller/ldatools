@@ -17,4 +17,3 @@ A vector of Cox-Snell residuals.
 \description{
 Extract Cox-Snell residuals from a \code{coxph} object
 }
-
