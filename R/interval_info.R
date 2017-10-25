@@ -1,45 +1,59 @@
-# @Author: andreas.bender@stat.uni-muenchen.de
-# @Date:   2016-12-12 16:11:27
-# @Last Modified by:   andreas.bender@stat.uni-muenchen.de
-# @Last Modified time: 2017-01-10 12:19:13
-
-#' Given breaks, create start/end times and interval information
+#' Create start/end times and interval information
 #'
-#' @param brks numeric. A vector of cut point in which the follow-up should be
-#' partitioned in.
-#' @param min.time numeric. Only intervals that have lower boarders larger than
-#' this value will be included in the resulting data frame.
-#' @return data.frame. A data frame containing the start and end times of the
-#' intervals specified by the \code{brks} argument. Additionally the interval
-#' length, interval mid-point and a factor variable of the intervals themselfs.
-#' @import checkmate dplyr
+#' Given interval breaks points, returns data frame with information on
+#' interval start time, interval end time, interval length and a interval factor
+#' variable (left open intervals). If object of class ped is provided, extracts
+#' unique interval information from object.
+#'
+#' @param x A numeric vector of cut points in which the follow-up should be
+#' partitioned in or object of class \code{ped}.
+#' @param ... Currently ignored.
+#' @rdname int_info
+#' @return A data frame containing the start and end times of the
+#' intervals specified by the \code{x} argument. Additionally the interval
+#' length, interval mid-point and a factor variable of the intervals themselves.
 #' @export
-int_info <- function(
-  brks,
-  min.time = 0L) {
+int_info <- function(x, ...) {
+  UseMethod("int_info",  x)
+}
+
+
+#' @inheritParams int_info
+#' @param min.time Only intervals that have lower borders larger than
+#' this value will be included in the resulting data frame.
+#' @import checkmate dplyr
+#' @examples
+#' ## create interval information from cut points
+#' int_info(c(1, 2.3, 5))
+#'
+#' @rdname int_info
+#' @export
+int_info.default <- function(
+  x,
+  min.time = 0L, ...) {
 
   # check inputs
-  assert_numeric(brks, lower = 0, any.missing = FALSE)
+  assert_numeric(x, lower = 0, any.missing = FALSE)
   assert_numeric(min.time, lower  = 0L)
 
-  # sort brks and add origin if necessary
-  if(is.unsorted(brks)) {
-    brks <- sort(brks)
+  # sort x and add origin if necessary
+  if(is.unsorted(x)) {
+    x <- sort(x)
   }
-  if(min(brks!=0)) {
-    brks <- c(0, brks)
+  if(min(x!=0)) {
+    x <- c(0, x)
   }
 
-  intlen <- diff(brks)
-  tstart <- brks[-length(brks)]
+  intlen <- diff(x)
+  tstart <- x[-length(x)]
   tend   <- tstart + intlen
 
   tdf <- data.frame(
     tstart = tstart,
     tend   = tend,
-    intlen = intlen) %>% 
+    intlen = intlen) %>%
     mutate(
-      intmid = tstart + intlen/2, 
+      intmid = tstart + intlen/2,
       interval = paste0("(", tstart, ",", tend, "]"),
       interval = factor(interval, levels=interval))
 
@@ -48,37 +62,58 @@ int_info <- function(
 }
 
 
-
-#' Given breaks, return intervals in which times vector falls
-#' 
+#' Information on intervals in which times fall
+#'
 #' @inheritParams int_info
-#' @param x Vector of values for which interval information should be returned.
+#' @param x An object from which interval information can be obtained,
+#' see \code{\link{int_info}}.
+#' @param times A vector of times for which corresponding interval information
+#' should be returned.
 #' @param ... Further arguments passed to \code{\link[base]{findInterval}}.
 #' @import dplyr
-#' @return A \code{data.frame} containing information on intervals in which 
-#' values of x fall
+#' @return A \code{data.frame} containing information on intervals in which
+#' values of \code{times} fall.
 #' @examples
 #' set.seed(111018)
 #' brks <- c(0, 4.5, 5, 10, 30)
 #' int_info(brks)
 #' x <- runif(3, 0, 30)
-#' get_intervals(brks, x, left.open=TRUE)
+#' x
+#' get_intervals(brks, x)
+#'
+#' @seealso \code{\link[base]{findInterval}} \code{\link{int_info}}
+#' @rdname get_intervals
 #' @export
-#' @seealso findInterval int_info
+get_intervals <- function(x, times, ...) {
+  UseMethod("get_intervals", x)
+}
 
-get_intervals <- function(brks, x, ...) {
+#' @inherit get_intervals
+#' @inheritParams base::findInterval
+#' @seealso \code{\link[base]{findInterval}}
+#' @rdname get_intervals
+#' @export
+get_intervals.default <- function(
+  x,
+  times,
+  left.open        = TRUE,
+  rightmost.closed = TRUE,
+  ...) {
 
   # check inputs
-  assert_numeric(brks, lower = 0, any.missing = FALSE)
-  assert_numeric(x, finite = TRUE, all.missing = FALSE)
+  assert_numeric(times, lower = 0, finite = TRUE, all.missing = FALSE)
 
-  int.df <- int_info(brks)
-  int <- findInterval(x, union(int.df$tstart, int.df$tend), ...)
+  int_df <- int_info(x)
+  int    <- findInterval(
+    x                = times,
+    vec              = union(int_df$tstart, int_df$tend),
+    left.open        = left.open,
+    rightmost.closed = rightmost.closed)
 
-  int.df %>% 
-    slice(int)      %>%
-    mutate(x = x)   %>%
-    arrange(tstart) %>%
-    select(x, everything())
+  int_df %>%
+    slice(int) %>%
+    mutate(times = times) %>%
+    arrange(times) %>%
+    select(times, everything())
 
 }
