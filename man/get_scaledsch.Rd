@@ -26,4 +26,3 @@ Schoenfeld residuals for the variables used in \code{fit}
 Extract scaled Schoenfeld residuals from
 \code{\link[survival]{coxph}} object in tidy format.
 }
-

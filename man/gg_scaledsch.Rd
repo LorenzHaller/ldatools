@@ -19,7 +19,6 @@ gg_scaledsch(fit, transform = "km")
   }
 }
 \description{
-Creates a \code{ggplot} object/plot of scaled schoenfeld residuals 
+Creates a \code{ggplot} object/plot of scaled schoenfeld residuals
 vs. (transformed) time.
 }
-

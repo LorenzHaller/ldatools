@@ -46,11 +46,12 @@ get_coxsnell <- function(fit) {
 	# are the martingale residuals
 	r.cs <- get_csvec(fit)
 	# estimate the cumulative hazard of the censored sample r.cs
-	sfit <- survfit(coxph(Surv(r.cs, fit$y[, "status"]) ~1, method="breslow"),
-			type="aalen") %>%
+	sfit <- survfit(
+		coxph(Surv(r.cs, fit$y[, "status"]) ~1, method = "breslow"),
+		type = "aalen") %>%
 		tidy() %>%
-		mutate(Lambda = -log(estimate)) %>%
-		rename(coxsnell = time, Survivor=estimate) %>%
+		mutate(Lambda   = -log(estimate)) %>%
+		rename(coxsnell = time, Survivor = estimate) %>%
 		select(coxsnell, Lambda, Survivor)
 
 
@@ -95,7 +96,7 @@ get_scaledsch <- function(fit, transform="km") {
 #' first row will be used.
 #' @param term The (non-linear) model term of interest.
 #' @param ... Currently ignored.
-#' @import magrittr dplyr
+#' @import dplyr
 #' @importFrom stats predict setNames
 #'
 get_term <- function(fit, data, term, ...) {
@@ -106,7 +107,7 @@ get_term <- function(fit, data, term, ...) {
 	}
 
 	range.term <- range(data[[col.term]])
-	seq.term <- seq(range.term[1], range.term[2], length.out = 100)
+	seq.term   <- seq(range.term[1], range.term[2], length.out = 100)
 
 	newdf <- data[1, ]
 	rm(data)
@@ -116,14 +117,15 @@ get_term <- function(fit, data, term, ...) {
 	newdf[[col.term]] <- seq.term
 	pred.term <- predict(fit, newdata=newdf, type="terms", se.fit=TRUE)
 	ind.term <- grep(term, colnames(pred.term$fit), value=TRUE)
-	newdf %<>% mutate(
-		term = col.term,
-		eff = as.numeric(pred.term$fit[, ind.term]),
-		se = as.numeric(pred.term$se.fit[, ind.term]),
-		ci.lower = eff - 2*se,
-		ci.upper = eff + 2*se) %>%
-	select_(.dots=c("term", col.term, "eff", "se", "ci.lower", "ci.upper")) %>%
-	rename_(.dots=setNames(col.term, "x"))
+	newdf <- newdf %>%
+		mutate(
+			term     = col.term,
+			eff      = as.numeric(pred.term$fit[, ind.term]),
+			se       = as.numeric(pred.term$se.fit[, ind.term]),
+			ci.lower = eff - 2*se,
+			ci.upper = eff + 2*se) %>%
+	select_(.dots = c("term", col.term, "eff", "se", "ci.lower", "ci.upper")) %>%
+	rename_(.dots = setNames(col.term, "x"))
 
 	return(newdf)
 
@@ -151,7 +153,7 @@ get_terms <- function(fit, data, terms, ...) {
 
   # apply get_term to each element of terms
 	term.list <- lapply(terms, function(z) {
-		get_term(fit=fit, data=data, term=z, ...)
+		get_term(fit = fit, data = data, term = z, ...)
 	})
 
 	bind_rows(term.list)

@@ -27,4 +27,3 @@ cox.tongue <- coxph(Surv(time, delta)~as.factor(type), data=tongue)
 cs.data <- get_coxsnell(cox.tongue)
 head(cs.data)
 }
-

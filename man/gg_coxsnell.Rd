@@ -33,4 +33,3 @@ gg_coxsnell(cox.tongue) +
 gg_coxsnell(cox.tongue, type="cdf") +
 	geom_line(aes(y=F), col=2)
 }
-
