@@ -37,10 +37,10 @@ int_info.default <- function(
   assert_numeric(min.time, lower  = 0L)
 
   # sort x and add origin if necessary
-  if(is.unsorted(x)) {
+  if (is.unsorted(x)) {
     x <- sort(x)
   }
-  if(min(x!=0)) {
+  if (min(x != 0)) {
     x <- c(0, x)
   }
 
@@ -53,9 +53,9 @@ int_info.default <- function(
     tend   = tend,
     intlen = intlen) %>%
     mutate(
-      intmid = tstart + intlen/2,
+      intmid = tstart + intlen / 2,
       interval = paste0("(", tstart, ",", tend, "]"),
-      interval = factor(interval, levels=interval))
+      interval = factor(interval, levels = interval))
 
   filter(tdf, tstart >= min.time)
 

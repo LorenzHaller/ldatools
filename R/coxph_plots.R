@@ -66,16 +66,16 @@ gg_scaledsch <- function(fit, transform = "km") {
 
   ## obtain scaled schoenfeld residuals and (transformed time)
   scaledsch <- get_scaledsch(fit = fit, transform = transform)
-  trans.string <- ifelse(unique(scaledsch$transform)=="identity", "t",
+  trans.string <- ifelse(unique(scaledsch$transform) == "identity", "t",
     paste0(unique(scaledsch$transform), "(t)"))
 
-  gg.zph <- ggplot(scaledsch, aes(x=time, y=residual)) +
+  gg.zph <- ggplot(scaledsch, aes(x = time, y = residual)) +
     geom_point() +
-    facet_wrap(~variable, nrow=2, scales="free_y") +
-    geom_smooth(method="lm", lty=2, aes(col="lm")) +
-    geom_smooth(method="gam", formula=y~s(x), aes(col="gam")) +
-    scale_color_discrete(name="method") +
-    geom_hline(yintercept=0, lty=3) +
+    facet_wrap(~variable, nrow = 2, scales = "free_y") +
+    geom_smooth(method = "lm", lty = 2, aes(col = "lm")) +
+    geom_smooth(method = "gam", formula = y~s(x), aes(col = "gam")) +
+    scale_color_discrete(name = "method") +
+    geom_hline(yintercept = 0, lty = 3) +
     xlab(trans.string) + ylab(expression(beta(t)))
 
   return(gg.zph)

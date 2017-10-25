@@ -29,7 +29,7 @@ library(survival)
 data("tongue", package="KMsurv")
 cox.tongue <- coxph(Surv(time, delta)~as.factor(type), data=tongue)
 gg_coxsnell(cox.tongue) +
-	geom_abline(intercept=0, slope=1, col=2)
+ geom_abline(intercept=0, slope=1, col=2)
 gg_coxsnell(cox.tongue, type="cdf") +
-	geom_line(aes(y=F), col=2)
+ geom_line(aes(y=F), col=2)
 }
