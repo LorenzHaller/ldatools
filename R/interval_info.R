@@ -117,3 +117,112 @@ get_intervals.default <- function(
     select(times, everything())
 
 }
+
+
+#' Create index of breaks survived
+#'
+#' @inheritParams split_info2
+#' @param time The time of the event.
+#' @keywords internal
+survived_breaks <- function(
+  time,
+  breaks,
+  right   = TRUE) {
+
+  if(!right) {
+    n_survived <- sum(time > breaks)
+  } else {
+    n_survived <- sum(time >= breaks)
+  }
+
+  seq_len(n_survived)
+
+}
+
+#' Create character vector of interval labels
+#'
+#' @inheritParams split_info2
+#' @param tstart Vector of interval start times.
+#' @param tend Vector of interval end times.
+#' @keywords internal
+paste_intervals <- function(tstart, tend, right = TRUE) {
+
+  if(right) {
+    left_bracket <- "("
+    right_bracket <- "]"
+  } else {
+    left_bracket <- "["
+    right_bracket <- ")"
+  }
+  paste0(left_bracket, tstart, ",", tend, right_bracket)
+
+}
+
+
+#' Transform standard time-to-event data to interval data
+#'
+#' Given a data set in standard format with one row per observation unit,
+#' transform the data set into interval data, where intervals are specified
+#' via breaks. Each observation unit will have as many rows as interval
+#' start points that it survived.
+#'
+#' @param data Data set from which time and status variables will be extracted.
+#' @param time_var The name of the variable storing event times.
+#' @param status_var The name of the variable storing the event indicator.
+#' @param breaks The time points of the interval borders.
+#' @param right Logical. If \code{TRUE} (default), intervals are assumed right
+#' closed and left open. If \code{FALSE} left closed and right open.
+#' @param max_end logical. Should the last interval span until the last
+#' observed censoring or event time (if larger than the largest specified
+#' cut point).
+#' @import checkmate dplyr purrr tibble
+split_info2 <- function(
+  data,
+  time_var   = "time",
+  status_var = "status",
+  breaks     = NULL,
+  right      = TRUE,
+  max_end    = FALSE) {
+
+  assert_data_frame(data, min.rows = 2, min.cols = 2)
+  assert_numeric(breaks, lower = 0, finite = TRUE, any.missing = FALSE,
+    min.len = 1, null.ok = TRUE)
+  assert_flag(right)
+  assert_flag(max_end)
+  assert_subset(c(time_var, status_var), names(data))
+
+
+  if (is.null(breaks)) {
+    breaks <- unique(data[[time_var]][data[[status_var]] == 1])
+  }
+  max_time <- max(max(data[[time_var]]), max(breaks))
+  # sort interval break points in case they are not (so that interval factor
+  # variables will be in correct ordering)
+  breaks <- sort(breaks)
+
+  # add last observation to breaks if necessary
+  if (max_end & (max_time > max(breaks))) {
+    breaks <- c(breaks, max_time)
+  }
+
+  n_survived <- map(data[[time_var]],
+    ~survived_breaks(., breaks = breaks, right = right))
+  last                 <- map_dbl(n_survived, max)
+  n_survived           <- flatten_dbl(n_survived)
+  status               <- rep(0L, length(n_survived))
+  status[cumsum(last)] <- data[[status_var]]
+
+  split_df <- tibble(
+    id     = rep(seq_len(nrow(data)), times = last),
+    tstart = breaks[n_survived],
+    tend   = breaks[n_survived + 1L],
+    status = status) %>%
+  mutate(
+    interval = paste_intervals(tstart, tend, right = right),
+    intlen   = tend - tstart)
+
+  attr(split_df, "breaks") <- breaks
+
+  split_df
+
+}
