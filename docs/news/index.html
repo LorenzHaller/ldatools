@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pipe operator — %&gt;% • ldatools</title>
+<title>All news • ldatools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-topic">
+    <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -81,25 +81,34 @@
       </header>
 
       <div class="row">
-  <div class="col-md-9 contents">
+
+  <div class="col-md-9">
     <div class="page-header">
-    <h1>Pipe operator</h1>
+      <h1>Change log <small>All releases</small></h1>
     </div>
 
-    
-    <p>See <code>magrittr::%&gt;%</code> for details.</p>
-    
-
-    <pre class="usage"><span class='no'>lhs</span> <span class='kw'>%&gt;%</span> <span class='no'>rhs</span></pre>
-        
-
+    <div class="contents">
+    <div id="ldatools-0-0-326" class="section level1">
+<h1 class="hasAnchor">
+<a href="#ldatools-0-0-326" class="anchor"></a>ldatools 0.0.326</h1>
+<ul>
+<li><p>Rewrote <code>split_info</code> function, removing the dependency on <code><a href="http://www.rdocumentation.org/packages/survival/topics/survSplit">survival::survSplit</a></code> and allowing for left closed, right open intervals</p></li>
+<li><p><code>lifetable</code> function now used correct, left closed intervals</p></li>
+<li><p>both functions can be used with bare, unquoted variable names</p></li>
+</ul>
+</div>
+    </div>
   </div>
+
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-                </ul>
-
+    <div id="tocnav">
+      <h2>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li><a href="#ldatools-0-0-326">0.0.326</a></li>
+      </ul>
+    </div>
   </div>
+
 </div>
 
       <footer>

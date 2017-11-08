@@ -11,15 +11,18 @@ Imports:
     checkmate,
     magrittr,
     tibble,
+    dplyr,
     broom,
     tidyr,
     purrr,
-    rlang,
-    dplyr
-License: MIT + file LICENSE
-LazyData: true
-RoxygenNote: 6.0.1
+    rlang
 Suggests:
     testthat,
     KMsurv,
     MASS
+Byte-Compile: yes
+License: MIT + file LICENSE
+LazyData: true
+URL: http://github.com/adibender/ldatools
+BugReports: http://github.com/adibender/ldatools/issues
+RoxygenNote: 6.0.1

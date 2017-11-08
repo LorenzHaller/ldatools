@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Overall model fit diagnostic via Cox-Snell residuals. — gg_coxsnell • ldatools</title>
+<title>Create character vector of interval labels — label_intervals • ldatools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -83,55 +83,40 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Overall model fit diagnostic via Cox-Snell residuals.</h1>
+    <h1>Create character vector of interval labels</h1>
     </div>
 
     
-    <p><code>gg_coxsnell</code> extracts Cox-Snell residuals from an <code><a href='http://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></code>
-object (which for a correct model should be a censored sample from Exp(1)) and
-the cumulative hazard rate of the residuals vs. the residuals.</p>
+    <p>Create character vector of interval labels</p>
     
 
-    <pre class="usage"><span class='fu'>gg_coxsnell</span>(<span class='no'>fit</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"cumuhazard"</span>, <span class='st'>"cdf"</span>))</pre>
+    <pre class="usage"><span class='fu'>label_intervals</span>(<span class='no'>tstart</span>, <span class='no'>tend</span>, <span class='kw'>right_closed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fit</th>
-      <td><p>the result of fitting a Cox regression model, using the <code>coxph</code> function.</p></td>
+      <th>tstart</th>
+      <td><p>Vector of interval start times.</p></td>
     </tr>
     <tr>
-      <th>type</th>
-      <td><p><code>character</code>. Optional argument. If <code>"cumuhazard"</code> plots
-cumulative hazard (Nelson-Aalen estimate) vs. Cox-Snell residuals.
-If <code>"cdf"</code> plot empirical cumulative distribution Function (Breslow estimate)
-vs. Cox-Snell residuals.</p></td>
+      <th>tend</th>
+      <td><p>Vector of interval end times.</p></td>
+    </tr>
+    <tr>
+      <th>right_closed</th>
+      <td><p>Logical. If <code>TRUE</code> (default), intervals are assumed right_closed
+closed and left open. If <code>FALSE</code> left closed and right_closed open.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplot'>ggplot</a></code> object.</p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>survival</span>)
-<span class='fu'>data</span>(<span class='st'>"tongue"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"KMsurv"</span>)
-<span class='no'>cox.tongue</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/survival/topics/coxph'>coxph</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/survival/topics/Surv'>Surv</a></span>(<span class='no'>time</span>, <span class='no'>delta</span>)~<span class='fu'>as.factor</span>(<span class='no'>type</span>), <span class='kw'>data</span><span class='kw'>=</span><span class='no'>tongue</span>)
-<span class='fu'>gg_coxsnell</span>(<span class='no'>cox.tongue</span>) +
- <span class='fu'>geom_abline</span>(<span class='kw'>intercept</span><span class='kw'>=</span><span class='fl'>0</span>, <span class='kw'>slope</span><span class='kw'>=</span><span class='fl'>1</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='img'><img src='gg_coxsnell-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='fu'>gg_coxsnell</span>(<span class='no'>cox.tongue</span>, <span class='kw'>type</span><span class='kw'>=</span><span class='st'>"cdf"</span>) +
- <span class='fu'>geom_line</span>(<span class='fu'>aes</span>(<span class='kw'>y</span><span class='kw'>=</span><span class='no'>F</span>), <span class='kw'>col</span><span class='kw'>=</span><span class='fl'>2</span>)</div><div class='img'><img src='gg_coxsnell-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>
