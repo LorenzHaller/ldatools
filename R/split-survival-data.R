@@ -1,130 +1,174 @@
-#' Function to transform data without time-dependent covariates into piece-wise
-#' exponential data format
+#' Create index of breaks survived
 #'
-#' @inheritParams survival::survSplit
-#' @param ... Further arguments passed to \code{\link[survival]{survSplit}}
-#' @param max.end logical. Should the last interval span until the last
+#' @inheritParams split_info
+#' @param time The time of the event.
+#' @keywords internal
+survived_breaks <- function(
+  time,
+  breaks,
+  right_closed   = TRUE) {
+
+  if (!right_closed) {
+    n_survived <- sum(time >= breaks)
+  } else {
+    n_survived <- sum(time > breaks)
+  }
+
+  seq_len(n_survived)
+
+}
+
+#' @keywords internal
+interval_status <- function(
+  time,
+  tend,
+  status,
+  right_closed = TRUE) {
+
+  if(!right_closed) {
+    event <- time < tend & status == 1
+  } else {
+    event <- time <= tend & status == 1
+  }
+
+  event * 1
+
+}
+
+
+#' Create character vector of interval labels
+#'
+#' @inheritParams split_info
+#' @param tstart Vector of interval start times.
+#' @param tend Vector of interval end times.
+#' @keywords internal
+label_intervals <- function(tstart, tend, right_closed = TRUE) {
+
+  if (right_closed) {
+    left_bracket  <- "("
+    right_closed_bracket <- "]"
+  } else {
+    left_bracket  <- "["
+    right_closed_bracket <- ")"
+  }
+  paste0(left_bracket, tstart, ",", tend, right_closed_bracket)
+
+}
+
+#' @inheritParams split_info
+#' @keywords internal
+process_breaks <- function(data, breaks, time_var, status_var, max_end) {
+
+  if (is.null(breaks)) {
+    breaks <- unique(data[[time_var]][data[[status_var]] == 1])
+  }
+  max_time <- max(max(data[[time_var]]), max(breaks))
+  # sort interval break points in case they are not (so that interval factor
+  # variables will be in correct ordering)
+  breaks <- sort(breaks)
+
+  # add last observation to breaks if necessary
+  if (max_end & (max_time > max(breaks))) {
+    breaks <- c(breaks, max_time)
+  }
+
+  breaks
+
+}
+
+#' @inheritParams split_info
+#' @keywords internal
+add_id <- function(data, id_var) {
+
+    if(id_var %in% names(data)) {
+      if (length(unique(dots$data[[id_var]])) != nrow(dots$data)) {
+        stop(paste0("Specified ID variable (", id_var, ") must have same number of unique values as number of rows in 'data'."))
+      }
+    } else {
+      data[[id_var]] <- seq_len(nrow(data))
+    }
+
+    data
+
+}
+
+#' Transform standard time-to-event data to interval data format.
+#'
+#' Given a data set in standard format with one row per observation unit,
+#' transform the data set into interval data, where intervals are specified
+#' via breaks. Each observation unit will have as many rows as interval
+#' start points that it survived.
+#'
+#' @param data Data set from which time and status variables will be extracted.
+#' @param time_var The variable storing event times.
+#' @param status_var The variable storing the event indicator.
+#' @param id_var The variable storing ID variable. Will be created if not
+#' in data set.
+#' @param breaks The time points of the interval borders.
+#' @param right_closed Logical. If \code{TRUE} (default), intervals are assumed right_closed
+#' closed and left open. If \code{FALSE} left closed and right_closed open.
+#' @param max_end logical. Should the last interval span until the last
 #' observed censoring or event time (if larger than the largest specified
 #' cut point).
-#' @import survival checkmate dplyr
-#' @importFrom stats as.formula update
-#' @importFrom purrr set_names
-#' @importFrom rlang UQS
-#' @return A data frame class \code{ped} in piece-wise exponential data format.
-#' @examples
-#' data("veteran", package="survival")
-#' head(veteran)
-#' ped <- split_info(Surv(time, status)~trt + age, data=veteran,
-#'    cut=c(0, 100, 400), id="id")
-#' head(ped)
-#' class(ped) # class ped (piece-wise exponential data)
-#' @seealso \code{\link[survival]{survSplit}}
+#' @import checkmate dplyr tibble
+#' @importFrom purrr map map_dbl flatten_dbl
 #' @export
-split_info <- function(formula, data, cut = NULL, ..., max.end = FALSE) {
+split_info <- function(
+  data,
+  time_var     = "time",
+  status_var   = "status",
+  id_var       = "id",
+  breaks       = NULL,
+  right_closed = TRUE,
+  max_end      = FALSE) {
 
-  ## assert that inputs have correct formats
-  assert_class(formula, "formula")
+
+  time_var   <- enquo(time_var)
+  status_var <- enquo(status_var)
+  id_var     <- enquo(id_var)
+
   assert_data_frame(data, min.rows = 2, min.cols = 2)
-  assert_numeric(cut, lower = 0, finite = TRUE, any.missing = FALSE,
+  assert_numeric(breaks, lower = 0, finite = TRUE, any.missing = FALSE,
     min.len = 1, null.ok = TRUE)
-  assert_flag(max.end)
+  assert_flag(right_closed)
+  assert_flag(max_end)
+  assert_subset(c(quo_name(time_var), quo_name(status_var)), names(data))
 
+  breaks <- process_breaks(data, breaks, quo_name(time_var),
+    quo_name(status_var), max_end)
 
-  ## extract names for event time and status variables
-  tvars <- all.vars(update(formula, .~0))
-  vars <- if ("." %in% all.vars(formula)) {
-      names(data)
-    } else {
-      all.vars(formula)
-    }
-  uvars <- union(tvars, vars)
-  if (!all(uvars %in% vars)) {
-    stop(paste("Variables provided in formula not in data set:",
-      paste0(setdiff(uvars, vars), collapse = ", ")))
-  }
+  n_survived <- map(data[[quo_name(time_var)]],
+    ~survived_breaks(., breaks = breaks, right_closed = right_closed))
+  last       <- map_dbl(n_survived, max)
+  n_survived <- flatten_dbl(n_survived)
+  slice_ind  <- rep(seq_len(nrow(data)), times = last)
 
+  # create data frame with interval information
+  int_df <- int_info(breaks, right_closed = right_closed) %>%
+    select(one_of(c("tstart", "tend", "interval"))) %>%
+    slice(n_survived)
 
-  if (length(tvars) != 2) {
-    stop(
-      "Currently a formula of the form Surv(time, event)~., is required.\n
-      See ?Surv for more details.")
-  }
-  ## standardize event time and status names
-  proposed.names <- c("time", "status")
-  data    <- rename(data, !!!set_names(tvars, as.list(proposed.names)))
-  formula <- as.formula(
-    paste0("Surv(time, status)",
-      paste0(formula[-2], collapse = "")))
+  # final interval data that will be output
+  interval_df <- data %>%
+    add_id(quo_name(id_var)) %>%
+    select(one_of(
+      c(quo_name(id_var), quo_name(time_var), quo_name(status_var)))) %>%
+    rename(
+      "time"   = !!time_var,
+      "status" = !!status_var) %>%
+    slice(slice_ind) %>%
+    bind_cols(int_df) %>%
+    mutate(status = interval_status(time, tend, status, right_closed = right_closed))
 
-  if (is.null(cut)) {
-    cut <- unique(data[["time"]][data[["status"]] == 1])
-  }
-  # max_fail <- max(data[["time"]][data[["status"]] == 1])
-  max_time <- max(max(data[["time"]]), max(cut))
+  # set some attributes that might be usefull in other functions
+  attr(interval_df, "id_var") <- quo_name(id_var)
+  attr(interval_df, "breaks") <- breaks
+  attr(interval_df, "right_closed")  <- right_closed
+  attr(interval_df, "interval_vars") <-  c(quo_name(id_var), "tstart", "tend",
+    "interval", "time", "status")
 
-
-  # sort interval cut points in case they are not (so that interval factor
-  # variables will be in correct ordering)
-  cut <- sort(cut)
-  # add last observation to cut if necessary
-  if (max.end & (max_time > max(cut))) {
-    cut <- c(cut, max_time)
-  }
-
-  ## crate argument list to be passed to survSplit
-  dots         <- list(...)
-  dots$data    <- data
-  dots$formula <- formula
-  dots$cut     <- cut
-  rm(data)
-
-  # if id allready in the data set, remove id variable from dots but keep
-  # id variable for later rearrangment
-  if (!is.null(dots$id)) {
-    id_var <- dots$id
-  } else {
-    id_var  <- "id"
-    dots$id <- id_var
-  }
-
-  if (id_var %in% names(dots$data)) {
-    if (length(unique(dots$data[[id_var]])) != nrow(dots$data)) {
-      stop(paste0("Specified ID variable (", id_var, ") must have same number of
-        unique values as number of rows in 'data'."))
-    }
-    if (id_var %in% vars) {
-      dots$id <- NULL
-    }
-  }
-
-  # create data in ped format
-  split_df <- do.call(survSplit, args = dots)
-
-  # Add variables for piece-wise exponential (additive) model
-  split_df  <- split_df %>%
-    mutate(
-      status = ifelse(status == 1 & time > max(cut), 0, status),
-      time   = pmin(time, max(cut))) %>%
-    filter(!(tstart == time))
-
-
-  ## combine data with general interval info
-  split_df <- left_join(split_df, int_info(cut), by = c("tstart" = "tstart"))
-
-  ## rearrange columns
-  move <- c(id_var, "tstart", "tend", "interval", "intmid", "intlen",
-    "time", "status")
-  split_df <- split_df %>%
-    select(one_of(move), everything(), -intmid, -intlen, -time)
-
-
-  ## set class and and attributes
-  class(split_df) <- c("ped", class(split_df))
-  attr(split_df, "cut") <- cut
-  attr(split_df, "id_var") <- id_var
-  attr(split_df, "intvars") <- c(id_var, "tstart", "tend", "interval", "offset",
-    "status")
-
-  return(split_df)
+  # rearrange columns
+  interval_df %>%
+    select(one_of(attr(interval_df, "interval_vars")))
 
 }

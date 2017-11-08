@@ -2,39 +2,33 @@
 % Please edit documentation in R/split-survival-data.R
 \name{split_info}
 \alias{split_info}
-\title{Function to transform data without time-dependent covariates into piece-wise
-exponential data format}
+\title{Transform standard time-to-event data to interval data format.}
 \usage{
-split_info(formula, data, cut = NULL, ..., max.end = FALSE)
+split_info(data, time_var = "time", status_var = "status", id_var = "id",
+  breaks = NULL, right_closed = TRUE, max_end = FALSE)
 }
 \arguments{
-\item{formula}{a model formula}
+\item{data}{Data set from which time and status variables will be extracted.}
 
-\item{data}{a data frame}
+\item{time_var}{The variable storing event times.}
 
-\item{cut}{the vector of timepoints to cut at}
+\item{status_var}{The variable storing the event indicator.}
 
-\item{...}{Further arguments passed to \code{\link[survival]{survSplit}}}
+\item{id_var}{The variable storing ID variable. Will be created if not
+in data set.}
 
-\item{max.end}{logical. Should the last interval span until the last
+\item{breaks}{The time points of the interval borders.}
+
+\item{right_closed}{Logical. If \code{TRUE} (default), intervals are assumed right_closed
+closed and left open. If \code{FALSE} left closed and right_closed open.}
+
+\item{max_end}{logical. Should the last interval span until the last
 observed censoring or event time (if larger than the largest specified
 cut point).}
 }
-\value{
-A data frame class \code{ped} in piece-wise exponential data format.
-}
 \description{
-Function to transform data without time-dependent covariates into piece-wise
-exponential data format
-}
-\examples{
-data("veteran", package="survival")
-head(veteran)
-ped <- split_info(Surv(time, status)~trt + age, data=veteran,
-   cut=c(0, 100, 400), id="id")
-head(ped)
-class(ped) # class ped (piece-wise exponential data)
-}
-\seealso{
-\code{\link[survival]{survSplit}}
+Given a data set in standard format with one row per observation unit,
+transform the data set into interval data, where intervals are specified
+via breaks. Each observation unit will have as many rows as interval
+start points that it survived.
 }
