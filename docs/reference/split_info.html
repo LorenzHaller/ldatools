@@ -6,8 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function to transform data without time-dependent covariates into piece-wise
-exponential data format — split_info • ldatools</title>
+<title>Transform standard time-to-event data to interval data format. — split_info • ldatools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -61,10 +60,18 @@ exponential data format — split_info • ldatools</title>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="http://github.com/adibender/ldatools">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -76,82 +83,63 @@ exponential data format — split_info • ldatools</title>
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Function to transform data without time-dependent covariates into piece-wise
-exponential data format</h1>
+    <h1>Transform standard time-to-event data to interval data format.</h1>
     </div>
 
     
-    <p>Function to transform data without time-dependent covariates into piece-wise
-exponential data format</p>
+    <p>Given a data set in standard format with one row per observation unit,
+transform the data set into interval data, where intervals are specified
+via breaks. Each observation unit will have as many rows as interval
+start points that it survived.</p>
     
 
-    <pre class="usage"><span class='fu'>split_info</span>(<span class='no'>formula</span>, <span class='no'>data</span>, <span class='kw'>cut</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>, <span class='kw'>max.end</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>split_info</span>(<span class='no'>data</span>, <span class='kw'>time_var</span> <span class='kw'>=</span> <span class='st'>"time"</span>, <span class='kw'>status_var</span> <span class='kw'>=</span> <span class='st'>"status"</span>, <span class='kw'>id_var</span> <span class='kw'>=</span> <span class='st'>"id"</span>,
+  <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>right_closed</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>max_end</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>formula</th>
-      <td><p>a model formula</p></td>
-    </tr>
-    <tr>
       <th>data</th>
-      <td><p>a data frame</p></td>
+      <td><p>Data set from which time and status variables will be extracted.</p></td>
     </tr>
     <tr>
-      <th>cut</th>
-      <td><p>the vector of timepoints to cut at</p></td>
+      <th>time_var</th>
+      <td><p>The variable storing event times.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Further arguments passed to <code><a href='http://www.rdocumentation.org/packages/survival/topics/survSplit'>survSplit</a></code></p></td>
+      <th>status_var</th>
+      <td><p>The variable storing the event indicator.</p></td>
     </tr>
     <tr>
-      <th>max.end</th>
+      <th>id_var</th>
+      <td><p>The variable storing ID variable. Will be created if not
+in data set.</p></td>
+    </tr>
+    <tr>
+      <th>breaks</th>
+      <td><p>The time points of the interval borders.</p></td>
+    </tr>
+    <tr>
+      <th>right_closed</th>
+      <td><p>Logical. If <code>TRUE</code> (default), intervals are assumed right_closed
+closed and left open. If <code>FALSE</code> left closed and right_closed open.</p></td>
+    </tr>
+    <tr>
+      <th>max_end</th>
       <td><p>logical. Should the last interval span until the last
 observed censoring or event time (if larger than the largest specified
 cut point).</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame class <code>ped</code> in piece-wise exponential data format.</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <p><code><a href='http://www.rdocumentation.org/packages/survival/topics/survSplit'>survSplit</a></code></p>
-    
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='st'>"veteran"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"survival"</span>)
-<span class='fu'>head</span>(<span class='no'>veteran</span>)</div><div class='output co'>#&gt;   trt celltype time status karno diagtime age prior
-#&gt; 1   1 squamous   72      1    60        7  69     0
-#&gt; 2   1 squamous  411      1    70        5  64    10
-#&gt; 3   1 squamous  228      1    60        3  38     0
-#&gt; 4   1 squamous  126      1    60        9  63    10
-#&gt; 5   1 squamous  118      1    70       11  65    10
-#&gt; 6   1 squamous   10      1    20        5  49     0</div><div class='input'><span class='no'>ped</span> <span class='kw'>&lt;-</span> <span class='fu'>split_info</span>(<span class='fu'>Surv</span>(<span class='no'>time</span>, <span class='no'>status</span>)~<span class='no'>trt</span> + <span class='no'>age</span>, <span class='kw'>data</span><span class='kw'>=</span><span class='no'>veteran</span>,
-   <span class='kw'>cut</span><span class='kw'>=</span><span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>100</span>, <span class='fl'>400</span>), <span class='kw'>id</span><span class='kw'>=</span><span class='st'>"id"</span>)
-<span class='fu'>head</span>(<span class='no'>ped</span>)</div><div class='output co'>#&gt;   id tstart tend  interval status trt age
-#&gt; 1  1      0  100   (0,100]      1   1  69
-#&gt; 2  2      0  100   (0,100]      0   1  64
-#&gt; 3  2    100  400 (100,400]      0   1  64
-#&gt; 4  3      0  100   (0,100]      0   1  38
-#&gt; 5  3    100  400 (100,400]      1   1  38
-#&gt; 6  4      0  100   (0,100]      0   1  63</div><div class='input'><span class='fu'>class</span>(<span class='no'>ped</span>) <span class='co'># class ped (piece-wise exponential data)</span></div><div class='output co'>#&gt; [1] "ped"        "data.frame"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+                </ul>
 
   </div>
 </div>

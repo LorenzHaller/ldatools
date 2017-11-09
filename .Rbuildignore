@@ -7,3 +7,4 @@ README.mdown
 .travis.yml
 ^LICENSE\.md$
 ^docs$
+^appveyor\.yml$

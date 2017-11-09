@@ -19,9 +19,10 @@ int_info <- function(x, ...) {
 
 
 #' @inheritParams int_info
-#' @param min.time Only intervals that have lower borders larger than
+#' @inheritParams split_info
+#' @param min_time Only intervals that have lower borders larger than
 #' this value will be included in the resulting data frame.
-#' @import checkmate dplyr
+#' @import checkmate dplyr tibble
 #' @examples
 #' ## create interval information from cut points
 #' int_info(c(1, 2.3, 5))
@@ -30,11 +31,13 @@ int_info <- function(x, ...) {
 #' @export
 int_info.default <- function(
   x,
-  min.time = 0L, ...) {
+  right_closed = TRUE,
+  min_time   = 0L,
+  ...) {
 
   # check inputs
   assert_numeric(x, lower = 0, any.missing = FALSE)
-  assert_numeric(min.time, lower  = 0L)
+  assert_numeric(min_time, lower  = 0L)
 
   # sort x and add origin if necessary
   if (is.unsorted(x)) {
@@ -48,16 +51,15 @@ int_info.default <- function(
   tstart <- x[-length(x)]
   tend   <- tstart + intlen
 
-  tdf <- data.frame(
-    tstart = tstart,
-    tend   = tend,
-    intlen = intlen) %>%
+  tdf <- tibble(
+      tstart = tstart,
+      tend   = tend,
+      intlen = intlen) %>%
     mutate(
-      intmid = tstart + intlen / 2,
-      interval = paste0("(", tstart, ",", tend, "]"),
-      interval = factor(interval, levels = interval))
+      intmid   = tstart + intlen / 2,
+      interval = label_intervals(tstart, tend, right_closed = right_closed))
 
-  filter(tdf, tstart >= min.time)
+  filter(tdf, tstart >= min_time)
 
 }
 

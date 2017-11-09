@@ -7,7 +7,7 @@
 \usage{
 int_info(x, ...)
 
-\method{int_info}{default}(x, min.time = 0L, ...)
+\method{int_info}{default}(x, right_closed = TRUE, min_time = 0L, ...)
 }
 \arguments{
 \item{x}{A numeric vector of cut points in which the follow-up should be
@@ -15,7 +15,10 @@ partitioned in or object of class \code{ped}.}
 
 \item{...}{Currently ignored.}
 
-\item{min.time}{Only intervals that have lower borders larger than
+\item{right_closed}{Logical. If \code{TRUE} (default), intervals are assumed right_closed
+closed and left open. If \code{FALSE} left closed and right_closed open.}
+
+\item{min_time}{Only intervals that have lower borders larger than
 this value will be included in the resulting data frame.}
 }
 \value{

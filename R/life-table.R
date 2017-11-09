@@ -1,24 +1,34 @@
 #' Implementation of the actuarial life table method.
 #'
 #' @inherit split_info
-#' @import dplyr
 #' @examples
 #' data("Melanoma", package="MASS")
 #' Melanoma$status <- ifelse(Melanoma$status == 1, 1, 0)
-#' lifetable(Melanoma, Surv(time,status)~1, cut = seq(0, 6000, 1500))
+#' lifetable(Melanoma, breaks = seq(0, 6000, 1500))
 #' @return A \code{\link[tibble]{tibble}} containing riskset information as well
 #' as hazard and survival function calculated by using the actuarial life table
 #' method.
 #' @seealso split_info
 #' @export
-lifetable <- function(data, formula, cut = NULL) {
+lifetable <- function(
+  data,
+  breaks       = NULL,
+  time_var     = "time",
+  status_var   = "status",
+  right_closed = FALSE,
+  max_end      = FALSE) {
 
-  split_df <- split_info(formula, data = data, cut = cut, id = "id") %>%
+  time_var   <- enquo(time_var)
+  status_var <- enquo(status_var)
+
+  split_df <- split_info(data = data, breaks = breaks,
+    !!time_var, !!status_var, right_closed = right_closed,
+    max_end = max_end) %>%
     select(id:tend, interval, status) %>%
     group_by(id) %>%
     mutate(censored = 1 * (status == 0 & max(tend) == tend)) %>%
-    ungroup() %>%
-    mutate(interval = as.character(interval))
+    ungroup()
+
   split_df %>%
     group_by(tstart, tend, interval) %>%
     summarize(
