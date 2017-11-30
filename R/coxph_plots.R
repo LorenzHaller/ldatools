@@ -5,7 +5,7 @@
 #' the cumulative hazard rate of the residuals vs. the residuals.
 #'
 #' @inheritParams survival::cox.zph
-#' @param type \code{character}. Optional argument. If \code{"cumuhazard"} plots
+#' @param type \code{character}. Optional argument. If \code{"cumu_hazard"} plots
 #' cumulative hazard (Nelson-Aalen estimate) vs. Cox-Snell residuals.
 #' If \code{"cdf"} plot empirical cumulative distribution Function (Breslow estimate)
 #' vs. Cox-Snell residuals.
@@ -20,8 +20,9 @@
 #'  geom_line(aes(y=F), col=2)
 #' @import dplyr ggplot2
 #' @importFrom stats pexp
+#' @importFrom rlang .data
 #' @export
-gg_coxsnell <- function(fit, type=c("cumuhazard", "cdf")) {
+gg_coxsnell <- function(fit, type=c("cumu_hazard", "cdf")) {
 
   type <- match.arg(type)
 
@@ -30,12 +31,12 @@ gg_coxsnell <- function(fit, type=c("cumuhazard", "cdf")) {
   if (type == "cdf") {
     cs_data <- cs_data %>%
       mutate(
-        CDF = 1 - Survivor,
-        F   = pexp(coxsnell))
+        CDF = 1 - .data$survival,
+        F   = pexp(.data$coxsnell))
     type      <- "CDF"
     ylab.text <- "Cumulative Distribution Function"
   } else {
-    type      <- "Lambda"
+    type      <- "cumu_hazard"
     ylab.text <- "Cumulative Hazard"
   }
 
@@ -69,7 +70,7 @@ gg_scaledsch <- function(fit, transform = "km") {
   trans.string <- ifelse(unique(scaledsch$transform) == "identity", "t",
     paste0(unique(scaledsch$transform), "(t)"))
 
-  gg.zph <- ggplot(scaledsch, aes(x = time, y = residual)) +
+  gg.zph <- ggplot(scaledsch, aes_string(x = "time", y = "residual")) +
     geom_point() +
     facet_wrap(~variable, nrow = 2, scales = "free_y") +
     geom_smooth(method = "lm", lty = 2, aes(col = "lm")) +

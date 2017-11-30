@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot scaled schoenfeld residuals vs. time — gg_scaledsch • ldatools</title>
+<title>Create formulas for all possible combinations of variables — create_formulas • ldatools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -83,31 +83,39 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot scaled schoenfeld residuals vs. time</h1>
+    <h1>Create formulas for all possible combinations of variables</h1>
     </div>
 
     
-    <p>Creates a <code>ggplot</code> object/plot of scaled schoenfeld residuals
-vs. (transformed) time.</p>
+    <p>Creates formulas for all possible combinations of variables provided to
+the function. All terms can appear as linear terms or non-linear terms.</p>
     
 
-    <pre class="usage"><span class='fu'>gg_scaledsch</span>(<span class='no'>fit</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"km"</span>)</pre>
+    <pre class="usage"><span class='fu'>create_formulas</span>(<span class='no'>covars</span>, <span class='kw'>lhs</span> <span class='kw'>=</span> <span class='st'>"Surv(time, status)~"</span>, <span class='kw'>fname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fit</th>
-      <td><p>the result of fitting a Cox regression model, using the <code>coxph</code> function.</p></td>
+      <th>covars</th>
+      <td><p>A character vector of variables for which all possible
+unique model formulas will be created.</p></td>
     </tr>
     <tr>
-      <th>transform</th>
-      <td><p>a character string specifying how the survival times should be transformed 
-    before the test is performed. 
-    Possible values are <code>"km"</code>, <code>"rank"</code>, <code>"identity"</code> or  a 
-    function of one argument.</p></td>
+      <th>lhs</th>
+      <td><p>The left-hand side of the formula to be produced.</p></td>
+    </tr>
+    <tr>
+      <th>fname</th>
+      <td><p>A string of the special function in which <code>x</code> will be
+wrapped in. Defaults to <code>"rcs"</code></p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A vector of formula strings for possible (and correct) model
+specifications given the variables provided.</p>
     
 
   </div>
@@ -115,7 +123,9 @@ vs. (transformed) time.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

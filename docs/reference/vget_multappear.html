@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot scaled schoenfeld residuals vs. time — gg_scaledsch • ldatools</title>
+<title>Check multiple strings for multiple appearances — vget_multappear • ldatools</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -83,31 +83,33 @@
       <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot scaled schoenfeld residuals vs. time</h1>
+    <h1>Check multiple strings for multiple appearances</h1>
     </div>
 
     
-    <p>Creates a <code>ggplot</code> object/plot of scaled schoenfeld residuals
-vs. (transformed) time.</p>
+    <p>A vectorized version of <code>get_multappear</code>.</p>
     
 
-    <pre class="usage"><span class='fu'>gg_scaledsch</span>(<span class='no'>fit</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"km"</span>)</pre>
+    <pre class="usage"><span class='fu'>vget_multappear</span>(<span class='no'>charvec</span>, <span class='no'>vec</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>fit</th>
-      <td><p>the result of fitting a Cox regression model, using the <code>coxph</code> function.</p></td>
+      <th>charvec</th>
+      <td><p>A Vector of strings. Each will be checked for multiple appearences
+in <code>vec</code></p></td>
     </tr>
     <tr>
-      <th>transform</th>
-      <td><p>a character string specifying how the survival times should be transformed 
-    before the test is performed. 
-    Possible values are <code>"km"</code>, <code>"rank"</code>, <code>"identity"</code> or  a 
-    function of one argument.</p></td>
+      <th>vec</th>
+      <td><p>The character vector in which to check multiple appearences of <code>char</code>.</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>TRUE</code> if any element of <code>charvec</code> appears in <code>vec</code>
+more than once, <code>FALSE</code> otherwise.</p>
     
 
   </div>
@@ -115,7 +117,9 @@ vs. (transformed) time.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#value">Value</a></li>
+          </ul>
 
   </div>
 </div>

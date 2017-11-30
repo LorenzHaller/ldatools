@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -140,12 +140,12 @@ method.</p>
     <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='st'>"Melanoma"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"MASS"</span>)
 <span class='no'>Melanoma</span>$<span class='no'>status</span> <span class='kw'>&lt;-</span> <span class='fu'>ifelse</span>(<span class='no'>Melanoma</span>$<span class='no'>status</span> <span class='kw'>==</span> <span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span>)
 <span class='fu'>lifetable</span>(<span class='no'>Melanoma</span>, <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fu'>seq</span>(<span class='fl'>0</span>, <span class='fl'>6000</span>, <span class='fl'>1500</span>))</div><div class='output co'>#&gt; # A tibble: 4 x 9
-#&gt;   tstart  tend interval        n events dropouts riskset hazard survival
-#&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       &lt;int&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;
-#&gt; 1      0  1500 [0,1500)      205  36.0     10.0   200    0.180     0.820
-#&gt; 2   1500  3000 [1500,3000)   159  19.0     86.0   116    0.164     0.686
-#&gt; 3   3000  4500 [3000,4500)    54   2.00    48.0    30.0  0.0667    0.640
-#&gt; 4   4500  6000 [4500,6000)     4   0        4.00    2.00 0         0.640</div></pre>
+#&gt;   tstart  tend    interval     n events dropouts riskset     hazard  survival
+#&gt;    &lt;dbl&gt; &lt;dbl&gt;       &lt;chr&gt; &lt;int&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
+#&gt; 1      0  1500    [0,1500)   205     36       10     200 0.18000000 0.8200000
+#&gt; 2   1500  3000 [1500,3000)   159     19       86     116 0.16379310 0.6856897
+#&gt; 3   3000  4500 [3000,4500)    54      2       48      30 0.06666667 0.6399770
+#&gt; 4   4500  6000 [4500,6000)     4      0        4       2 0.00000000 0.6399770</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

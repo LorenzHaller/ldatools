@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -85,7 +85,7 @@
     <div class="page-header">
       <h1>
         Reference
-        <small>version&nbsp;0.0.326</small>
+        <small>version&nbsp;0.0.4</small>
       </h1>
     </div>
 
@@ -100,46 +100,36 @@
       <tbody>
         <tr>
           <th colspan="2">
-            <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-            <p class="section-desc"></p>
+            <h2 id="section-interval-information" class="hasAnchor"><a href="#section-interval-information" class="anchor"></a>Interval information</h2>
+            <p class="section-desc"><p>Functions that help extract interval-specific summary information.</p></p>
           </th>
         </tr>
         <tr>
           <!--  -->
           <td>
-            <p><code><a href="geom_stepribbon.html">geom_stepribbon</a></code> </p>
+            <p><code><a href="int_info.html">int_info</a></code> </p>
           </td>
-          <td><p>Step ribbon plots.</p></td>
+          <td><p>Create start/end times and interval information</p></td>
         </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="split_info.html">split_info</a></code> </p>
+          </td>
+          <td><p>Transform standard time-to-event data to interval data format.</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-residuals" class="hasAnchor"><a href="#section-residuals" class="anchor"></a>Residuals</h2>
+            <p class="section-desc"><p>Extract (or plot) residuals from Cox models.</p></p>
+          </th>
+        </tr>
+        <tr>
           <!--  -->
           <td>
             <p><code><a href="get_coxsnell.html">get_coxsnell</a></code> </p>
           </td>
           <td><p>Extract data needed to create Cox-Snell vs. Cumulative hazard plot</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_csvec.html">get_csvec</a></code> </p>
-          </td>
-          <td><p>Extract Cox-Snell residuals from a <code>coxph</code> object</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_intervals.html">get_intervals</a></code> </p>
-          </td>
-          <td><p>Information on intervals in which times fall</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_scaledsch.html">get_scaledsch</a></code> </p>
-          </td>
-          <td><p>Extract scaled Schoenfeld residuals.</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="get_terms.html">get_terms</a></code> </p>
-          </td>
-          <td><p>Extract the partial effects of non-linear model terms</p></td>
         </tr><tr>
           <!--  -->
           <td>
@@ -149,27 +139,63 @@
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="gg_scaledsch.html">gg_scaledsch</a></code> </p>
+            <p><code><a href="get_scaledsch.html">get_scaledsch</a></code> </p>
           </td>
-          <td><p>Plot scaled schoenfeld residuals vs. time</p></td>
+          <td><p>Extract scaled Schoenfeld residuals.</p></td>
         </tr><tr>
           <!--  -->
           <td>
-            <p><code><a href="int_info.html">int_info</a></code> </p>
+            <p><code><a href="gg_scaledsch.html">gg_scaledsch</a></code> </p>
           </td>
-          <td><p>Create start/end times and interval information</p></td>
+          <td><p>Plot scaled schoenfeld residuals vs. time</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-plot-helpers" class="hasAnchor"><a href="#section-plot-helpers" class="anchor"></a>Plot helpers</h2>
+            <p class="section-desc"><p>Utility functions for visualizations</p></p>
+          </th>
+        </tr>
+        <tr>
+          <!--  -->
+          <td>
+            <p><code><a href="get_terms.html">get_terms</a></code> </p>
+          </td>
+          <td><p>Extract the partial effects of non-linear model terms</p></td>
         </tr><tr>
+          <!--  -->
+          <td>
+            <p><code><a href="geom_stepribbon.html">geom_stepribbon</a></code> </p>
+          </td>
+          <td><p>Step ribbon plots.</p></td>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-estimation" class="hasAnchor"><a href="#section-estimation" class="anchor"></a>Estimation</h2>
+            <p class="section-desc"><p>Estimation functions for quantaties of time-to-event data</p></p>
+          </th>
+        </tr>
+        <tr>
           <!--  -->
           <td>
             <p><code><a href="lifetable.html">lifetable</a></code> </p>
           </td>
           <td><p>Implementation of the actuarial life table method.</p></td>
-        </tr><tr>
+        </tr>
+      </tbody><tbody>
+        <tr>
+          <th colspan="2">
+            <h2 id="section-utility" class="hasAnchor"><a href="#section-utility" class="anchor"></a>Utility</h2>
+            <p class="section-desc"><p>Miscelaneous utility functions</p></p>
+          </th>
+        </tr>
+        <tr>
           <!--  -->
           <td>
-            <p><code><a href="split_info.html">split_info</a></code> </p>
+            <p><code><a href="create_formulas.html">create_formulas</a></code> </p>
           </td>
-          <td><p>Transform standard time-to-event data to interval data format.</p></td>
+          <td><p>Create formulas for all possible combinations of variables</p></td>
         </tr>
       </tbody>
       </table>
@@ -179,7 +205,11 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-interval-information">Interval information</a></li>
+      <li><a href="#section-residuals">Residuals</a></li>
+      <li><a href="#section-plot-helpers">Plot helpers</a></li>
+      <li><a href="#section-estimation">Estimation</a></li>
+      <li><a href="#section-utility">Utility</a></li>
     </ul>
   </div>
 </div>

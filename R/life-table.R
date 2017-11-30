@@ -21,25 +21,29 @@ lifetable <- function(
   time_var   <- enquo(time_var)
   status_var <- enquo(status_var)
 
+  if (is.null(breaks)) {
+    breaks <- ceiling(seq(0, max(data[[quo_name(time_var)]]), length.out = 10))
+  }
+
   split_df <- split_info(data = data, breaks = breaks,
     !!time_var, !!status_var, right_closed = right_closed,
     max_end = max_end) %>%
-    select(id:tend, interval, status) %>%
-    group_by(id) %>%
-    mutate(censored = 1 * (status == 0 & max(tend) == tend)) %>%
+    select(-one_of("time")) %>%
+    group_by(.data$id) %>%
+    mutate(censored = 1 * (.data$status == 0 & max(.data$tend) == .data$tend)) %>%
     ungroup()
 
   split_df %>%
-    group_by(tstart, tend, interval) %>%
+    group_by(.data$tstart, .data$tend, .data$ interval) %>%
     summarize(
       n        = n(),
-      events   = sum(status),
-      dropouts = sum(censored)) %>%
+      events   = sum(.data$status),
+      dropouts = sum(.data$censored)) %>%
     ungroup() %>%
     mutate(
-      riskset  = n - dropouts / 2,
-      hazard   = events / riskset,
-      survival = cumprod(1 - hazard)) %>%
-    arrange(tstart)
+      riskset  = n - .data$dropouts / 2,
+      hazard   = .data$events / .data$riskset,
+      survival = cumprod(1 - .data$hazard)) %>%
+    arrange(.data$tstart)
 
 }

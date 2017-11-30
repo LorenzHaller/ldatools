@@ -14,8 +14,8 @@ get_coxsnell(fit)
 \value{
 A data frame containing (not censored) Cox-Snell residuals
 (\code{coxsnell}) and Nelson-Aalen estimate of the Cumulative Hazard
-(\code{Lambda}) as well as the Breslow estimate for the Survival
-function (\code{Survivor}) for censored data.
+(\code{Lcumu_hazard}) as well as the Breslow estimate for the Survival
+function (\code{survival}) for censored data.
 }
 \description{
 Extract data needed to create Cox-Snell vs. Cumulative hazard plot
