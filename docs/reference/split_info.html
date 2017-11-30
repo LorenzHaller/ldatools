@@ -52,7 +52,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="..//index.html">
+  <a href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -134,12 +134,30 @@ cut point).</p></td>
     </table>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>data</span>(<span class='no'>ovarian</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"survival"</span>)
+<span class='fu'>split_info</span>(<span class='no'>ovarian</span>, <span class='no'>futime</span>, <span class='no'>fustat</span>, <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>59</span>, <span class='fl'>500</span>, <span class='fl'>1500</span>))</div><div class='output co'>#&gt; # A tibble: 63 x 6
+#&gt;       id tstart  tend interval  time status
+#&gt;    &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
+#&gt;  1     1      0    59   (0,59]    59      1
+#&gt;  2     2      0    59   (0,59]   115      0
+#&gt;  3     2     59   500 (59,500]   115      1
+#&gt;  4     3      0    59   (0,59]   156      0
+#&gt;  5     3     59   500 (59,500]   156      1
+#&gt;  6     4      0    59   (0,59]   421      0
+#&gt;  7     4     59   500 (59,500]   421      0
+#&gt;  8     5      0    59   (0,59]   431      0
+#&gt;  9     5     59   500 (59,500]   431      1
+#&gt; 10     6      0    59   (0,59]   448      0
+#&gt; # ... with 53 more rows</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
