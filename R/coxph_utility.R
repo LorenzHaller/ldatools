@@ -3,6 +3,7 @@
 #' @inheritParams survival::cox.zph
 #' @importFrom checkmate assert_class
 #' @return A vector of Cox-Snell residuals.
+#' @keywords internal
 #' @export
 get_csvec <- function(fit) {
 
@@ -23,6 +24,7 @@ get_csvec <- function(fit) {
 #' @import dplyr
 #' @importFrom checkmate assert_class
 #' @importFrom broom tidy
+#' @importFrom rlang .data
 #' @examples
 #' library(survival)
 #' data("tongue", package="KMsurv")
@@ -31,8 +33,8 @@ get_csvec <- function(fit) {
 #' head(cs.data)
 #' @return A data frame containing (not censored) Cox-Snell residuals
 #' (\code{coxsnell}) and Nelson-Aalen estimate of the Cumulative Hazard
-#' (\code{Lambda}) as well as the Breslow estimate for the Survival
-#' function (\code{Survivor}) for censored data.
+#' (\code{Lcumu_hazard}) as well as the Breslow estimate for the Survival
+#' function (\code{survival}) for censored data.
 #' @export
 get_coxsnell <- function(fit) {
 
@@ -44,14 +46,12 @@ get_coxsnell <- function(fit) {
   # are the martingale residuals
   resid_cs <- get_csvec(fit)
   # estimate the cumulative hazard of the censored sample resid_cs
-  sfit <- survfit(
-    coxph(Surv(resid_cs, fit$y[, "status"]) ~1, method = "breslow"),
-    type = "aalen") %>%
+  sfit <- survfit(coxph(Surv(resid_cs, fit$y[, "status"]) ~1, method = "breslow"),
+      type = "aalen") %>%
     tidy() %>%
-    mutate(Lambda   = -log(estimate)) %>%
-    rename(coxsnell = time, Survivor = estimate) %>%
-    select(coxsnell, Lambda, Survivor)
-
+    mutate(cumu_hazard = -log(.data$estimate)) %>%
+    rename("coxsnell" = "time", "survival" = "estimate") %>%
+    select(one_of(c("coxsnell", "cumu_hazard", "survival")))
 
   return(sfit)
 
@@ -68,6 +68,7 @@ get_coxsnell <- function(fit) {
 #' @importFrom survival cox.zph
 #' @importFrom tibble as_tibble
 #' @importFrom tidyr gather
+#' @importFrom rlang .data
 #' @return A tidy data frame containing the (transformed) time and scaled
 #' Schoenfeld residuals for the variables used in \code{fit}
 #' @export
@@ -82,7 +83,7 @@ get_scaledsch <- function(fit, transform="km") {
     cbind(
       time      = zph$x,
       transform = zph$transform) %>%
-    gather(variable, residual, -time, -transform)
+    gather("variable","residual", -.data$time, -.data$transform)
 
 }
 
@@ -120,8 +121,8 @@ get_term <- function(fit, data, term, ...) {
       term     = col.term,
       eff      = as.numeric(pred.term$fit[, ind.term]),
       se       = as.numeric(pred.term$se.fit[, ind.term]),
-      ci.lower = eff - 2 * se,
-      ci.upper = eff + 2 * se) %>%
+      ci.lower = .data$eff - 2 * .data$se,
+      ci.upper = .data$eff + 2 * .data$se) %>%
   select_(.dots = c("term", col.term, "eff", "se", "ci.lower", "ci.upper")) %>%
   rename_(.dots = setNames(col.term, "x"))
 

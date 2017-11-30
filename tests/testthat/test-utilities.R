@@ -7,7 +7,7 @@ test_that("Interval infos correct", {
 	expect_data_frame(int_df <- int_info(1:2), nrows = 2, ncols = 5)
 	expect_equal(names(int_df), c("tstart", "tend", "intlen", "intmid", "interval"))
   expect_equal(int_df$interval, c("(0,1]", "(1,2]"))
-	expect_equal(int_info(1:2, right = FALSE)$interval, c("[0,1)", "[1,2)"))
+	expect_equal(int_info(1:2, right_closed = FALSE)$interval, c("[0,1)", "[1,2)"))
 })
 
 

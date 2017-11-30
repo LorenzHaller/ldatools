@@ -1,13 +1,14 @@
 context("Residuals")
 
-## Cox-Snell Residuals 
+## Cox-Snell Residuals
 data("tongue", package="KMsurv")
 cox.tongue <- coxph(Surv(time, delta)~type, data=tongue)
 
 test_that("Dimensions and names correct", {
 	expect_equal(length(get_csvec(cox.tongue)), nrow(tongue))
-	expect_equal(dim(get_coxsnell(cox.tongue)), c(57, 3))
-	expect_equal(names(get_coxsnell(cox.tongue)), c("coxsnell", "Lambda", "Survivor"))
+	expect_data_frame(get_coxsnell(cox.tongue), nrows=57L, ncols=3L)
+	expect_equal(names(get_coxsnell(cox.tongue)),
+		c("coxsnell", "cumu_hazard", "survival"))
 })
 
 
@@ -19,20 +20,20 @@ test_that("Error thrown on misspecification", {
 
 
 test_that("Cox-Snell plots work", {
-	expect_is(gg_coxsnell(cox.tongue, type="cumuhazard"), c("gg", "ggplot"))
+	expect_is(gg_coxsnell(cox.tongue, type="cumu_hazard"), c("gg", "ggplot"))
 	expect_is(gg_coxsnell(cox.tongue, type="cdf"), c("gg", "ggplot"))
 })
 
 
 test_that("Cox-Snell throws error on misspecification", {
-	expect_error(gg_coxsnell(iris, type="cumuhazard"))
+	expect_error(gg_coxsnell(iris, type="cumu_hazard"))
 })
 
 
 ## Schoenfeld residuals
 data("veteran", package="survival")
 
-fit.vet <- coxph(Surv(time, status) ~ trt + celltype + karno+ 
+fit.vet <- coxph(Surv(time, status) ~ trt + celltype + karno+
 	diagtime + age + prior, data=veteran)
 
 zph.vet <- cox.zph(fit.vet, transform="identity", global=FALSE)
@@ -54,5 +55,5 @@ test_that("Scaled Schoenfeld plots work", {
 })
 
 test_that("Scaled Schoenfeld plot throws error on misspecification", {
-	expect_error(gg_scaledsch(iris, type="cumuhazard"))
+	expect_error(gg_scaledsch(iris, type="cumu_hazard"))
 })

@@ -60,7 +60,7 @@ label_intervals <- function(tstart, tend, right_closed = TRUE) {
 process_breaks <- function(data, breaks, time_var, status_var, max_end) {
 
   if (is.null(breaks)) {
-    breaks <- unique(data[[time_var]][data[[status_var]] == 1])
+    breaks <- unique(c(0, data[[time_var]][data[[status_var]] == 1]))
   }
   max_time <- max(max(data[[time_var]]), max(breaks))
   # sort interval break points in case they are not (so that interval factor
@@ -81,7 +81,7 @@ process_breaks <- function(data, breaks, time_var, status_var, max_end) {
 add_id <- function(data, id_var) {
 
     if(id_var %in% names(data)) {
-      if (length(unique(dots$data[[id_var]])) != nrow(dots$data)) {
+      if (length(unique(data[[id_var]])) != nrow(data)) {
         stop(paste0("Specified ID variable (", id_var, ") must have same number of unique values as number of rows in 'data'."))
       }
     } else {
@@ -112,6 +112,9 @@ add_id <- function(data, id_var) {
 #' cut point).
 #' @import checkmate dplyr tibble
 #' @importFrom purrr map map_dbl flatten_dbl
+#' @examples
+#' data(ovarian, package="survival")
+#' split_info(ovarian, futime, fustat, breaks = c(0, 59, 500, 1500))
 #' @export
 split_info <- function(
   data,
@@ -137,6 +140,16 @@ split_info <- function(
   breaks <- process_breaks(data, breaks, quo_name(time_var),
     quo_name(status_var), max_end)
 
+  interval_df <- data %>%
+    add_id(quo_name(id_var)) %>%
+    select(one_of(
+      c(quo_name(id_var), quo_name(time_var), quo_name(status_var)))) %>%
+    rename(
+      "time"   = !!time_var,
+      "status" = !!status_var) %>%
+    mutate(
+      time = ifelse(.data$time > max(breaks), max(breaks), .data$time),
+      status = ifelse(.data$time > max(breaks), 0, .data$status))
   n_survived <- map(data[[quo_name(time_var)]],
     ~survived_breaks(., breaks = breaks, right_closed = right_closed))
   last       <- map_dbl(n_survived, max)
@@ -149,16 +162,11 @@ split_info <- function(
     slice(n_survived)
 
   # final interval data that will be output
-  interval_df <- data %>%
-    add_id(quo_name(id_var)) %>%
-    select(one_of(
-      c(quo_name(id_var), quo_name(time_var), quo_name(status_var)))) %>%
-    rename(
-      "time"   = !!time_var,
-      "status" = !!status_var) %>%
+  interval_df <- interval_df %>%
     slice(slice_ind) %>%
     bind_cols(int_df) %>%
-    mutate(status = interval_status(time, tend, status, right_closed = right_closed))
+    mutate(status = interval_status(.data$time, .data$tend, .data$status,
+      right_closed = right_closed))
 
   # set some attributes that might be usefull in other functions
   attr(interval_df, "id_var") <- quo_name(id_var)

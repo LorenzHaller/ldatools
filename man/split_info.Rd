@@ -32,3 +32,7 @@ transform the data set into interval data, where intervals are specified
 via breaks. Each observation unit will have as many rows as interval
 start points that it survived.
 }
+\examples{
+data(ovarian, package="survival")
+split_info(ovarian, futime, fustat, breaks = c(0, 59, 500, 1500))
+}
